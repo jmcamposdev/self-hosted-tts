@@ -18,7 +18,9 @@ class Client:
         if not path.startswith('/v1/'):
             raise ValueError('Only relative API paths are allowed')
         body=json.dumps(payload).encode() if payload is not None and content_type=='application/json' else payload
-        req=urllib.request.Request(self.url+path,data=body,method=method,headers={'Authorization':'Bearer '+self.key,'Content-Type':content_type})
+        headers={'Authorization':'Bearer '+self.key}
+        if body is not None:headers['Content-Type']=content_type
+        req=urllib.request.Request(self.url+path,data=body,method=method,headers=headers)
         try:
             with urllib.request.urlopen(req,timeout=60) as r:return r.read(),r.headers.get_content_type()
         except urllib.error.HTTPError as e:
