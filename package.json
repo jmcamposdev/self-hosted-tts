@@ -1,0 +1,45 @@
+{
+  "name": "self-hosted-tts",
+  "version": "0.1.0",
+  "description": "Private asynchronous Spanish TTS with cloned voices and character alignment",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/api.js",
+    "worker": "node dist/worker.js",
+    "dev": "tsx src/api.ts",
+    "dev:worker": "tsx src/worker.ts",
+    "test": "tsx --test test/*.test.ts",
+    "test:python": ".venv/bin/python -m unittest discover -s test -p \"test_*.py\"",
+    "format:check": "prettier --check src test/*.ts compose.yaml package.json tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmcamposdev/self-hosted-tts.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/jmcamposdev/self-hosted-tts/issues"
+  },
+  "homepage": "https://github.com/jmcamposdev/self-hosted-tts#readme",
+  "dependencies": {
+    "@fastify/multipart": "^9.4.0",
+    "@fastify/rate-limit": "^10.3.0",
+    "@fastify/swagger": "^9.9.2",
+    "@fastify/swagger-ui": "^6.1.2",
+    "fastify": "^5.12.7",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "prettier": "^3.9.10",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  }
+}

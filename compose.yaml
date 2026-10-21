@@ -1,0 +1,96 @@
+name: self-hosted-tts
+services:
+  api:
+    platform: linux/arm64
+    user: "${TTS_UID:-1000}:${TTS_GID:-1000}"
+    build:
+      context: .
+      target: api
+    restart: unless-stopped
+    init: true
+    read_only: true
+    tmpfs: [/tmp]
+    ports:
+      - "127.0.0.1:${API_PORT:-8080}:8080"
+    environment:
+      API_KEY_FILE: /run/secrets/api_key
+      ALIGNER_URL: http://aligner:8081
+      DATA_DIR: /data
+      MAX_QUEUE: ${MAX_QUEUE:-100}
+      MIN_FREE_BYTES: ${MIN_FREE_BYTES:-2147483648}
+      RETENTION_DAYS: ${RETENTION_DAYS:-7}
+    secrets: [api_key]
+    volumes: [./storage:/data]
+    mem_limit: 512m
+    cpus: 0.5
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test:
+        [
+          CMD,
+          node,
+          -e,
+          "fetch('http://127.0.0.1:8080/health/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+  worker:
+    platform: linux/arm64
+    user: "${TTS_UID:-1000}:${TTS_GID:-1000}"
+    build:
+      context: .
+      target: worker
+    restart: unless-stopped
+    init: true
+    read_only: true
+    tmpfs: [/tmp]
+    depends_on:
+      aligner:
+        condition: service_healthy
+    environment:
+      API_KEY_FILE: /run/secrets/api_key
+      DATA_DIR: /data
+      ALIGNER_URL: http://aligner:8081
+      TTS_THREADS: ${TTS_THREADS:-4}
+      RETENTION_DAYS: ${RETENTION_DAYS:-7}
+      MIN_FREE_BYTES: ${MIN_FREE_BYTES:-2147483648}
+    secrets: [api_key]
+    volumes: [./storage:/data, ./models:/models:ro]
+    mem_limit: 12g
+    cpus: 4
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    stop_grace_period: 15s
+  aligner:
+    platform: linux/arm64
+    user: "${TTS_UID:-1000}:${TTS_GID:-1000}"
+    build:
+      context: .
+      dockerfile: alignment_service/Dockerfile
+    restart: unless-stopped
+    init: true
+    read_only: true
+    tmpfs: [/tmp]
+    volumes: [./storage:/data:ro, ./models:/models:ro]
+    mem_limit: 4g
+    cpus: 4
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test:
+        [
+          CMD,
+          python,
+          -c,
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8081/health',timeout=5)",
+        ]
+      interval: 20s
+      timeout: 7s
+      retries: 5
+      start_period: 120s
+secrets:
+  api_key:
+    file: ./.secrets/api_key

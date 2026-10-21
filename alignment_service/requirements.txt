@@ -1,0 +1,8 @@
+# NumPy 2 is incompatible with the ctc-segmentation 1.7.4 extension.
+numpy==1.26.4
+torch==2.8.0
+transformers==4.57.1
+ctc-segmentation==1.7.4
+num2words==0.5.14
+fastapi==0.115.12
+uvicorn==0.34.3
