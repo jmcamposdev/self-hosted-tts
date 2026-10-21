@@ -1,18 +1,18 @@
 import { stat } from "node:fs/promises";
 import { join } from "node:path";
-import type { Configuration } from "../../config/config.types.js";
+import type { Configuration } from "#config/config.types.js";
 import {
   ARTIFACT_MIME,
   ARTIFACT_NAMES,
   isArtifactName,
-} from "../../domain/artifacts/artifacts.js";
-import { isActive } from "../../domain/job/job.tools.js";
-import type { Job } from "../../domain/job/job.types.js";
-import type { NarrationRequest } from "../../domain/narration/narration.schema.js";
-import type { JobPurger } from "../../infra/storage/job-purger.js";
-import type { Store } from "../../persistence/store.js";
-import { IDEMPOTENCY_KEY_MAX_CHARS } from "../../shared/constants/limits.constants.js";
-import { Fault } from "../../shared/errors/fault.js";
+} from "#domain/artifacts/artifacts.js";
+import { isActive } from "#domain/job/job.tools.js";
+import type { Job } from "#domain/job/job.types.js";
+import type { NarrationRequest } from "#domain/narration/narration.schema.js";
+import type { JobPurger } from "#infra/storage/job-purger.js";
+import type { Store } from "#persistence/store.js";
+import { IDEMPOTENCY_KEY_MAX_CHARS } from "#shared/constants/limits.constants.js";
+import { Fault } from "#shared/errors/fault.js";
 import { publicVoice } from "../presenters/voice.presenter.js";
 import type { VoiceService } from "./voice.service.js";
 

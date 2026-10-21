@@ -2,20 +2,20 @@ import {
   SAMPLE_RATE,
   BYTES_PER_SAMPLE,
   BYTES_PER_SECOND,
-} from "../../../shared/constants/audio.constants.js";
-import { MAX_OUTPUT_SECONDS } from "../../../shared/constants/limits.constants.js";
+} from "#shared/constants/audio.constants.js";
+import { MAX_OUTPUT_SECONDS } from "#shared/constants/limits.constants.js";
 import {
   appendAlignment,
   emptyAlignment,
-} from "../../../domain/alignment/alignment.merge.js";
+} from "#domain/alignment/alignment.merge.js";
 import type {
   Alignment,
   ChunkSummary,
   Segment,
-} from "../../../domain/alignment/alignment.types.js";
-import { validateAlignment } from "../../../domain/alignment/alignment.validate.js";
-import type { AlignResponse } from "../../../infra/aligner/aligner.types.js";
-import { Fault } from "../../../shared/errors/fault.js";
+} from "#domain/alignment/alignment.types.js";
+import { validateAlignment } from "#domain/alignment/alignment.validate.js";
+import type { AlignResponse } from "#infra/aligner/aligner.types.js";
+import { Fault } from "#shared/errors/fault.js";
 
 /**
  * Concatenates fragments into one master timeline. Offsets use the real number

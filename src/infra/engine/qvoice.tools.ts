@@ -1,11 +1,11 @@
-import { MAX_PROFILE_BYTES } from "../../shared/constants/limits.constants.js";
+import { MAX_PROFILE_BYTES } from "#shared/constants/limits.constants.js";
 import {
   QVOICE_HIDDEN_SIZE,
   QVOICE_HIDDEN_SIZE_OFFSET,
   QVOICE_MAGIC,
   QVOICE_MIN_BYTES,
-} from "../../shared/constants/engine.constants.js";
-import { Fault } from "../../shared/errors/fault.js";
+} from "#shared/constants/engine.constants.js";
+import { Fault } from "#shared/errors/fault.js";
 
 /** Accepts only a 1.7B-compatible `.qvoice` profile of sane size. */
 export function assertQvoiceProfile(profile: Buffer): void {

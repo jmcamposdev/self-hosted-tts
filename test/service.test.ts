@@ -3,11 +3,11 @@ import assert from "node:assert/strict";
 import { mkdtemp, rm, mkdir, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { Store, type Voice } from "../src/store.js";
-import { createApi } from "../src/api.js";
-import { configuration } from "../src/config.js";
-import { defaults, validateAlignment, Fault } from "../src/contracts.js";
-import { splitText, srt, wav, command } from "../src/media.js";
+import { Store, type Voice } from "#store.js";
+import { createApi } from "#api.js";
+import { configuration } from "#config.js";
+import { defaults, validateAlignment, Fault } from "#contracts.js";
+import { splitText, srt, wav, command } from "#media.js";
 
 async function setup() {
   const data = await mkdtemp(join(tmpdir(), "tts-test-"));

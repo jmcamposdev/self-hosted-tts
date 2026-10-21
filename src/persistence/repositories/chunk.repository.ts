@@ -1,5 +1,5 @@
-import type { ChunkCheckpoint, Job } from "../../domain/job/job.types.js";
-import { Fault } from "../../shared/errors/fault.js";
+import type { ChunkCheckpoint, Job } from "#domain/job/job.types.js";
+import { Fault } from "#shared/errors/fault.js";
 import type { Database } from "../database.js";
 import type { JobRepository } from "./job.repository.js";
 

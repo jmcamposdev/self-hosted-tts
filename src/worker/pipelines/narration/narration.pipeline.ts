@@ -1,15 +1,15 @@
-import { projectToOriginal } from "../../../domain/alignment/alignment.project.js";
-import { validateAlignment } from "../../../domain/alignment/alignment.validate.js";
-import { parseRequest, parseSnapshot } from "../../../domain/job/job.tools.js";
+import { projectToOriginal } from "#domain/alignment/alignment.project.js";
+import { validateAlignment } from "#domain/alignment/alignment.validate.js";
+import { parseRequest, parseSnapshot } from "#domain/job/job.tools.js";
 import {
   deriveSeed,
   resolveSettings,
-} from "../../../domain/settings/settings.tools.js";
-import { splitText } from "../../../domain/text/segmentation.js";
-import { readPcm } from "../../../infra/audio/wav.tools.js";
-import { Fault } from "../../../shared/errors/fault.js";
-import { ensureFreeSpace } from "../../../shared/tools/fs.tools.js";
-import { hashFile } from "../../../shared/tools/hash.tools.js";
+} from "#domain/settings/settings.tools.js";
+import { splitText } from "#domain/text/segmentation.js";
+import { readPcm } from "#infra/audio/wav.tools.js";
+import { Fault } from "#shared/errors/fault.js";
+import { ensureFreeSpace } from "#shared/tools/fs.tools.js";
+import { hashFile } from "#shared/tools/hash.tools.js";
 import { join } from "node:path";
 import type { JobContext, JobPipeline, WorkerDeps } from "../pipeline.types.js";
 import { NarrationAssembler } from "./assemble.step.js";

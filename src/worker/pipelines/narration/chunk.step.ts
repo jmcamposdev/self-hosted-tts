@@ -1,11 +1,11 @@
 import { mkdir, rm } from "node:fs/promises";
 import { join } from "node:path";
-import { validateAlignment } from "../../../domain/alignment/alignment.validate.js";
-import type { Segment } from "../../../domain/alignment/alignment.types.js";
-import type { Job } from "../../../domain/job/job.types.js";
-import type { ResolvedSettings } from "../../../domain/settings/settings.types.js";
-import type { AlignResponse } from "../../../infra/aligner/aligner.types.js";
-import { applyGain, probe, toRawPcm } from "../../../infra/ffmpeg/ffmpeg.js";
+import { validateAlignment } from "#domain/alignment/alignment.validate.js";
+import type { Segment } from "#domain/alignment/alignment.types.js";
+import type { Job } from "#domain/job/job.types.js";
+import type { ResolvedSettings } from "#domain/settings/settings.types.js";
+import type { AlignResponse } from "#infra/aligner/aligner.types.js";
+import { applyGain, probe, toRawPcm } from "#infra/ffmpeg/ffmpeg.js";
 import type { WorkerDeps } from "../pipeline.types.js";
 import {
   chunkFingerprint,

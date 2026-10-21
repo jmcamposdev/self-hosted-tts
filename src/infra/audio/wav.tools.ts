@@ -3,8 +3,8 @@ import {
   BYTES_PER_SAMPLE,
   SAMPLE_RATE,
   WAV_HEADER_BYTES,
-} from "../../shared/constants/audio.constants.js";
-import { Fault } from "../../shared/errors/fault.js";
+} from "#shared/constants/audio.constants.js";
+import { Fault } from "#shared/errors/fault.js";
 
 /** Reads raw s16le PCM, rejecting odd byte counts (truncated samples). */
 export async function readPcm(path: string): Promise<Buffer> {

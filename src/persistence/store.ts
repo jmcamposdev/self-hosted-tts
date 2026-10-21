@@ -4,8 +4,8 @@ import { ChunkRepository } from "./repositories/chunk.repository.js";
 import { JobRepository } from "./repositories/job.repository.js";
 import { LockRepository } from "./repositories/lock.repository.js";
 import { VoiceRepository } from "./repositories/voice.repository.js";
-import type { Voice } from "../domain/voice/voice.types.js";
-import type { Job } from "../domain/job/job.types.js";
+import type { Voice } from "#domain/voice/voice.types.js";
+import type { Job } from "#domain/job/job.types.js";
 
 /**
  * Composition root of persistence. Application code talks to repositories;

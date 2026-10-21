@@ -2,8 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { ARTIFACT_NAMES } from "../src/domain/artifacts/artifacts.js";
-import { ENGINE_COMMIT } from "../src/shared/constants/engine.constants.js";
+import { ARTIFACT_NAMES } from "#domain/artifacts/artifacts.js";
+import { ENGINE_COMMIT } from "#shared/constants/engine.constants.js";
 
 test("pins.json is consistent with TypeScript engine constants and artifacts list", async () => {
   const root = join(import.meta.dirname, "..");

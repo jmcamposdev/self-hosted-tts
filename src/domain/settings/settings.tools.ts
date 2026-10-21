@@ -1,4 +1,4 @@
-import { sha256 } from "../../shared/tools/hash.tools.js";
+import { sha256 } from "#shared/tools/hash.tools.js";
 import { DEFAULT_SETTINGS } from "./settings.schema.js";
 import type { ResolvedSettings, Settings } from "./settings.types.js";
 

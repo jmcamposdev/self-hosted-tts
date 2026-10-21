@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from "fastify";
 import type { ApiContext } from "../api.types.js";
-import { READY_ALIGNER_TIMEOUT_MS } from "../../shared/constants/limits.constants.js";
+import { READY_ALIGNER_TIMEOUT_MS } from "#shared/constants/limits.constants.js";
 
 export const healthRoutes =
   (ctx: ApiContext): FastifyPluginAsync =>

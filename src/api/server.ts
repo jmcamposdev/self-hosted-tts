@@ -5,10 +5,10 @@ import {
   serializerCompiler,
   validatorCompiler,
 } from "fastify-type-provider-zod";
-import type { Configuration } from "../config/config.types.js";
-import { Store } from "../persistence/store.js";
-import { AlignerClient } from "../infra/aligner/aligner-client.js";
-import { JobPurger } from "../infra/storage/job-purger.js";
+import type { Configuration } from "#config/config.types.js";
+import { Store } from "#persistence/store.js";
+import { AlignerClient } from "#infra/aligner/aligner-client.js";
+import { JobPurger } from "#infra/storage/job-purger.js";
 import { VoiceService } from "./services/voice.service.js";
 import { JobService } from "./services/job.service.js";
 import type { ApiContext } from "./api.types.js";
@@ -24,7 +24,7 @@ import {
   RATE_LIMIT_MAX,
   RATE_LIMIT_WINDOW,
   UPLOAD_MAX_BYTES,
-} from "../shared/constants/limits.constants.js";
+} from "#shared/constants/limits.constants.js";
 
 export async function createApi(config: Configuration) {
   const store = new Store(config.data);

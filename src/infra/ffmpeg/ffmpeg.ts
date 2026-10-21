@@ -1,13 +1,13 @@
 import {
   SAMPLE_RATE,
   OPUS_BITRATE,
-} from "../../shared/constants/audio.constants.js";
+} from "#shared/constants/audio.constants.js";
 import {
   FFMPEG_TIMEOUT_MS,
   PREFLIGHT_TIMEOUT_MS,
-} from "../../shared/constants/limits.constants.js";
-import { Fault } from "../../shared/errors/fault.js";
-import { runProcess } from "../process/process-runner.js";
+} from "#shared/constants/limits.constants.js";
+import { Fault } from "#shared/errors/fault.js";
+import { runProcess } from "#infra/process/process-runner.js";
 import type { MediaInfo } from "./ffmpeg.types.js";
 
 const BASE = ["-v", "error", "-nostdin", "-y"];

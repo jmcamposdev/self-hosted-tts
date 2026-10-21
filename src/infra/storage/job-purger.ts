@@ -1,5 +1,5 @@
 import { rm } from "node:fs/promises";
-import type { JobRepository } from "../../persistence/repositories/job.repository.js";
+import type { JobRepository } from "#persistence/repositories/job.repository.js";
 import { jobRoot } from "./storage.paths.js";
 
 /** Physically deletes a finished job. Shared by DELETE /v1/jobs/:id and the janitor. */

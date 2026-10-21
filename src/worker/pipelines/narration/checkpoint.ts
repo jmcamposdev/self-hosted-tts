@@ -1,13 +1,13 @@
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import type { ChunkCheckpoint } from "../../../domain/job/job.types.js";
-import type { ResolvedSettings } from "../../../domain/settings/settings.types.js";
-import type { AlignResponse } from "../../../infra/aligner/aligner.types.js";
-import { ALIGNMENT_PROTOCOL } from "../../../shared/constants/engine.constants.js";
-import { Fault } from "../../../shared/errors/fault.js";
-import { writeJson } from "../../../shared/tools/fs.tools.js";
-import { hashFile, sha256 } from "../../../shared/tools/hash.tools.js";
+import type { ChunkCheckpoint } from "#domain/job/job.types.js";
+import type { ResolvedSettings } from "#domain/settings/settings.types.js";
+import type { AlignResponse } from "#infra/aligner/aligner.types.js";
+import { ALIGNMENT_PROTOCOL } from "#shared/constants/engine.constants.js";
+import { Fault } from "#shared/errors/fault.js";
+import { writeJson } from "#shared/tools/fs.tools.js";
+import { hashFile, sha256 } from "#shared/tools/hash.tools.js";
 
 /** Content of `chunk.json` stored next to a fragment's `audio.pcm`. */
 export interface ChunkRecord {

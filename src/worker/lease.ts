@@ -1,5 +1,5 @@
-import type { Job } from "../domain/job/job.types.js";
-import type { Store } from "../persistence/store.js";
+import type { Job } from "#domain/job/job.types.js";
+import type { Store } from "#persistence/store.js";
 
 /**
  * Renews the worker lock and job lease on an interval. When the lease is lost

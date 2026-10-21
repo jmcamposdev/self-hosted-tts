@@ -7,10 +7,10 @@ import { createHash } from "node:crypto";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { once } from "node:events";
-import { configuration } from "../src/config.js";
-import { Worker } from "../src/worker.js";
-import { defaults } from "../src/contracts.js";
-import { wav } from "../src/media.js";
+import { configuration } from "#config.js";
+import { Worker } from "#worker.js";
+import { defaults } from "#contracts.js";
+import { wav } from "#media.js";
 
 // Characterization (golden) test. It pins the externally observable output of a
 // narration job: alignment projection onto the ORIGINAL text (identity and

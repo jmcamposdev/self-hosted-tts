@@ -1,9 +1,9 @@
 import {
   SEGMENT_MAX_CHARS,
   SEGMENT_MIN_SENTENCE_CHARS,
-} from "../../shared/constants/limits.constants.js";
-import { Fault } from "../../shared/errors/fault.js";
-import type { Segment } from "../alignment/alignment.types.js";
+} from "#shared/constants/limits.constants.js";
+import { Fault } from "#shared/errors/fault.js";
+import type { Segment } from "#domain/alignment/alignment.types.js";
 
 const HAS_SPEECH = /[\p{L}\p{N}]/u;
 const PARAGRAPH_BREAK = /\n\s*\n/u;

@@ -3,26 +3,26 @@ import { join } from "node:path";
 import type {
   Alignment,
   ChunkSummary,
-} from "../../../domain/alignment/alignment.types.js";
-import type { NarrationMetadata } from "../../../domain/artifacts/metadata.types.js";
-import { srt } from "../../../domain/artifacts/subtitles.js";
-import { wordsFromAlignment } from "../../../domain/artifacts/words.js";
-import type { Job } from "../../../domain/job/job.types.js";
-import type { ResolvedSettings } from "../../../domain/settings/settings.types.js";
-import type { Voice } from "../../../domain/voice/voice.types.js";
-import { wav } from "../../../infra/audio/wav.tools.js";
-import { encodeOpus, probe } from "../../../infra/ffmpeg/ffmpeg.js";
-import { SAMPLE_RATE } from "../../../shared/constants/audio.constants.js";
+} from "#domain/alignment/alignment.types.js";
+import type { NarrationMetadata } from "#domain/artifacts/metadata.types.js";
+import { srt } from "#domain/artifacts/subtitles.js";
+import { wordsFromAlignment } from "#domain/artifacts/words.js";
+import type { Job } from "#domain/job/job.types.js";
+import type { ResolvedSettings } from "#domain/settings/settings.types.js";
+import type { Voice } from "#domain/voice/voice.types.js";
+import { wav } from "#infra/audio/wav.tools.js";
+import { encodeOpus, probe } from "#infra/ffmpeg/ffmpeg.js";
+import { SAMPLE_RATE } from "#shared/constants/audio.constants.js";
 import {
   ALIGNMENT_METHOD,
   ENGINE_COMMIT,
   METADATA_SCHEMA_VERSION,
   MODEL_LABEL,
-} from "../../../shared/constants/engine.constants.js";
-import { ENCODER_DURATION_TOLERANCE_SECONDS } from "../../../shared/constants/limits.constants.js";
-import { Fault } from "../../../shared/errors/fault.js";
-import { writeJson } from "../../../shared/tools/fs.tools.js";
-import { hashFile } from "../../../shared/tools/hash.tools.js";
+} from "#shared/constants/engine.constants.js";
+import { ENCODER_DURATION_TOLERANCE_SECONDS } from "#shared/constants/limits.constants.js";
+import { Fault } from "#shared/errors/fault.js";
+import { writeJson } from "#shared/tools/fs.tools.js";
+import { hashFile } from "#shared/tools/hash.tools.js";
 import type { WorkerDeps } from "../pipeline.types.js";
 
 export interface PublishInput {

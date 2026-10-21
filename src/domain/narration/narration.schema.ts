@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { NARRATION_TEXT_MAX_CHARS } from "../../shared/constants/limits.constants.js";
-import { settingsSchema } from "../settings/settings.schema.js";
+import { NARRATION_TEXT_MAX_CHARS } from "#shared/constants/limits.constants.js";
+import { settingsSchema } from "#domain/settings/settings.schema.js";
 
 export const narrationSchema = z
   .object({

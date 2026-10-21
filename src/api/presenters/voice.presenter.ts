@@ -1,4 +1,4 @@
-import type { Voice } from "../../domain/voice/voice.types.js";
+import type { Voice } from "#domain/voice/voice.types.js";
 import type { PublicVoice } from "../api.types.js";
 
 export const publicVoice = (v: Voice): PublicVoice => ({

@@ -5,10 +5,10 @@ import { mkdtemp, writeFile, readFile, rm, mkdir } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { once } from "node:events";
-import { configuration } from "../src/config.js";
-import { Worker } from "../src/worker.js";
-import { defaults, validateAlignment } from "../src/contracts.js";
-import { wav } from "../src/media.js";
+import { configuration } from "#config.js";
+import { Worker } from "#worker.js";
+import { defaults, validateAlignment } from "#contracts.js";
+import { wav } from "#media.js";
 
 // This test uses explicit synthetic backend doubles. It verifies orchestration,
 // output paths, sample offsets and recovery; it does NOT evaluate TTS or CTC quality.

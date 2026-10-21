@@ -1,7 +1,7 @@
 import { rm } from "node:fs/promises";
-import { voiceDir } from "../infra/storage/storage.paths.js";
-import type { JobPurger } from "../infra/storage/job-purger.js";
-import type { Store } from "../persistence/store.js";
+import { voiceDir } from "#infra/storage/storage.paths.js";
+import type { JobPurger } from "#infra/storage/job-purger.js";
+import type { Store } from "#persistence/store.js";
 
 /** Periodic physical cleanup of deleted voices and expired job artifacts. */
 export class Janitor {

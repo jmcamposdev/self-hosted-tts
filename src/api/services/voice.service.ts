@@ -1,17 +1,14 @@
 import { randomUUID } from "node:crypto";
 import { mkdir, rm, writeFile } from "node:fs/promises";
-import type { Configuration } from "../../config/config.types.js";
-import type { Job } from "../../domain/job/job.types.js";
-import { DEFAULT_SETTINGS } from "../../domain/settings/settings.schema.js";
-import type { Settings } from "../../domain/settings/settings.types.js";
-import type { VoicePatch } from "../../domain/voice/voice.schema.js";
-import type { Voice } from "../../domain/voice/voice.types.js";
-import {
-  voiceDir,
-  voiceReferencePath,
-} from "../../infra/storage/storage.paths.js";
-import type { Store } from "../../persistence/store.js";
-import { Fault } from "../../shared/errors/fault.js";
+import type { Configuration } from "#config/config.types.js";
+import type { Job } from "#domain/job/job.types.js";
+import { DEFAULT_SETTINGS } from "#domain/settings/settings.schema.js";
+import type { Settings } from "#domain/settings/settings.types.js";
+import type { VoicePatch } from "#domain/voice/voice.schema.js";
+import type { Voice } from "#domain/voice/voice.types.js";
+import { voiceDir, voiceReferencePath } from "#infra/storage/storage.paths.js";
+import type { Store } from "#persistence/store.js";
+import { Fault } from "#shared/errors/fault.js";
 
 export interface CreateVoiceInput {
   name: string;

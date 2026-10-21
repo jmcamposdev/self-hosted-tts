@@ -1,4 +1,4 @@
-import type { Job } from "../../domain/job/job.types.js";
+import type { Job } from "#domain/job/job.types.js";
 import type { PublicJob } from "../api.types.js";
 
 export const publicJob = (j: Job): PublicJob => ({

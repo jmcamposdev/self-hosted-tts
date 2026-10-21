@@ -2,11 +2,11 @@ import type { FastifyPluginAsync } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import type { ApiContext } from "../api.types.js";
 import { publicVoice } from "../presenters/voice.presenter.js";
-import { voicePatchSchema } from "../../domain/voice/voice.schema.js";
-import { settingsSchema } from "../../domain/settings/settings.schema.js";
-import { idParamSchema } from "../../domain/common/params.schema.js";
-import { Fault } from "../../shared/errors/fault.js";
-import { ensureFreeSpace } from "../../shared/tools/fs.tools.js";
+import { voicePatchSchema } from "#domain/voice/voice.schema.js";
+import { settingsSchema } from "#domain/settings/settings.schema.js";
+import { idParamSchema } from "#domain/common/params.schema.js";
+import { Fault } from "#shared/errors/fault.js";
+import { ensureFreeSpace } from "#shared/tools/fs.tools.js";
 
 export const voiceRoutes =
   (ctx: ApiContext): FastifyPluginAsync =>

@@ -1,5 +1,5 @@
-import { ALIGNMENT_END_TOLERANCE_SECONDS } from "../../shared/constants/limits.constants.js";
-import { Fault } from "../../shared/errors/fault.js";
+import { ALIGNMENT_END_TOLERANCE_SECONDS } from "#shared/constants/limits.constants.js";
+import { Fault } from "#shared/errors/fault.js";
 import type { Alignment } from "./alignment.types.js";
 
 /** Rejects alignments that do not reproduce `text` or have invalid/non-monotonic timestamps. */

@@ -6,10 +6,10 @@ import {
   ENGINE_TEMPERATURE,
   EXPECTED_MODEL_SIZE,
   SEED_MODULUS,
-} from "../../shared/constants/engine.constants.js";
-import { Fault } from "../../shared/errors/fault.js";
-import { hashFile } from "../../shared/tools/hash.tools.js";
-import { runProcess } from "../process/process-runner.js";
+} from "#shared/constants/engine.constants.js";
+import { Fault } from "#shared/errors/fault.js";
+import { hashFile } from "#shared/tools/hash.tools.js";
+import { runProcess } from "#infra/process/process-runner.js";
 import type {
   CloneProfileInput,
   EngineSettings,

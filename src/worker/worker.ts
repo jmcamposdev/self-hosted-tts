@@ -1,19 +1,19 @@
 import { randomUUID } from "node:crypto";
 import { mkdir } from "node:fs/promises";
 import { setTimeout as delay } from "node:timers/promises";
-import type { Configuration } from "../config/config.types.js";
-import type { JobKind } from "../domain/job/job.types.js";
-import { AlignerClient } from "../infra/aligner/aligner-client.js";
-import { QwenEngine } from "../infra/engine/qwen-engine.js";
-import { JobPurger } from "../infra/storage/job-purger.js";
-import { jobAttemptDir } from "../infra/storage/storage.paths.js";
-import { Store } from "../persistence/store.js";
+import type { Configuration } from "#config/config.types.js";
+import type { JobKind } from "#domain/job/job.types.js";
+import { AlignerClient } from "#infra/aligner/aligner-client.js";
+import { QwenEngine } from "#infra/engine/qwen-engine.js";
+import { JobPurger } from "#infra/storage/job-purger.js";
+import { jobAttemptDir } from "#infra/storage/storage.paths.js";
+import { Store } from "#persistence/store.js";
 import {
   JANITOR_INTERVAL_MS,
   WORKER_IDLE_DELAY_MS,
-} from "../shared/constants/limits.constants.js";
-import { Fault } from "../shared/errors/fault.js";
-import { logEvent } from "../shared/logging/logger.js";
+} from "#shared/constants/limits.constants.js";
+import { Fault } from "#shared/errors/fault.js";
+import { logEvent } from "#shared/logging/logger.js";
 import { Janitor } from "./janitor.js";
 import { LeaseKeeper } from "./lease.js";
 import { ClonePipeline } from "./pipelines/clone.pipeline.js";

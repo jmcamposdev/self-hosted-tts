@@ -5,7 +5,7 @@ import type { ApiContext } from "../api.types.js";
 import {
   idParamSchema,
   artifactParamSchema,
-} from "../../domain/common/params.schema.js";
+} from "#domain/common/params.schema.js";
 import { publicJob } from "../presenters/job.presenter.js";
 
 export const jobRoutes =

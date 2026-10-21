@@ -1,8 +1,8 @@
-import type { Configuration } from "../../config/config.types.js";
-import type { Job, JobKind } from "../../domain/job/job.types.js";
-import type { AlignerClient } from "../../infra/aligner/aligner-client.js";
-import type { QwenEngine } from "../../infra/engine/qwen-engine.js";
-import type { Store } from "../../persistence/store.js";
+import type { Configuration } from "#config/config.types.js";
+import type { Job, JobKind } from "#domain/job/job.types.js";
+import type { AlignerClient } from "#infra/aligner/aligner-client.js";
+import type { QwenEngine } from "#infra/engine/qwen-engine.js";
+import type { Store } from "#persistence/store.js";
 
 /** Collaborators shared by every pipeline. `engineHash` is set during preflight. */
 export interface WorkerDeps {

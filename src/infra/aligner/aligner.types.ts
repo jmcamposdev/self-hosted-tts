@@ -1,7 +1,7 @@
 import type {
   Alignment,
   SourceMapping,
-} from "../../domain/alignment/alignment.types.js";
+} from "#domain/alignment/alignment.types.js";
 
 /**
  * HTTP contract with `alignment_service` (mirrors alignment_service/schemas.py;

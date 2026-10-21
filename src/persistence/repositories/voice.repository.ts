@@ -1,4 +1,4 @@
-import type { Voice } from "../../domain/voice/voice.types.js";
+import type { Voice } from "#domain/voice/voice.types.js";
 import type { Database } from "../database.js";
 
 export class VoiceRepository {

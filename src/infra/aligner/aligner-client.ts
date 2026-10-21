@@ -1,5 +1,5 @@
-import { PREFLIGHT_TIMEOUT_MS } from "../../shared/constants/limits.constants.js";
-import { Fault } from "../../shared/errors/fault.js";
+import { PREFLIGHT_TIMEOUT_MS } from "#shared/constants/limits.constants.js";
+import { Fault } from "#shared/errors/fault.js";
 import type { AlignResponse, NormalizeResponse } from "./aligner.types.js";
 
 /** Client for the internal alignment service (never exposed publicly). */

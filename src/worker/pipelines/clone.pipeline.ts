@@ -1,17 +1,17 @@
 import { copyFile, readFile, rm } from "node:fs/promises";
 import { join } from "node:path";
-import type { CloneMetadata } from "../../domain/artifacts/metadata.types.js";
-import { parseSnapshot } from "../../domain/job/job.tools.js";
-import { assertQvoiceProfile } from "../../infra/engine/qvoice.tools.js";
-import { probe, toReferenceWav } from "../../infra/ffmpeg/ffmpeg.js";
-import { voiceProfilePath } from "../../infra/storage/storage.paths.js";
+import type { CloneMetadata } from "#domain/artifacts/metadata.types.js";
+import { parseSnapshot } from "#domain/job/job.tools.js";
+import { assertQvoiceProfile } from "#infra/engine/qvoice.tools.js";
+import { probe, toReferenceWav } from "#infra/ffmpeg/ffmpeg.js";
+import { voiceProfilePath } from "#infra/storage/storage.paths.js";
 import {
   REFERENCE_MAX_SECONDS,
   REFERENCE_MIN_SECONDS,
-} from "../../shared/constants/limits.constants.js";
-import { Fault } from "../../shared/errors/fault.js";
-import { writeJson } from "../../shared/tools/fs.tools.js";
-import { hashFile } from "../../shared/tools/hash.tools.js";
+} from "#shared/constants/limits.constants.js";
+import { Fault } from "#shared/errors/fault.js";
+import { writeJson } from "#shared/tools/fs.tools.js";
+import { hashFile } from "#shared/tools/hash.tools.js";
 import type { JobContext, JobPipeline, WorkerDeps } from "./pipeline.types.js";
 
 /** Turns an uploaded reference into a stored `.qvoice` profile and marks the voice ready. */

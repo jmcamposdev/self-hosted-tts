@@ -26,6 +26,12 @@
   "author": "",
   "license": "MIT",
   "type": "module",
+  "imports": {
+    "#*": {
+      "development": "./src/*",
+      "default": "./dist/*"
+    }
+  },
   "bugs": {
     "url": "https://github.com/jmcamposdev/self-hosted-tts/issues"
   },

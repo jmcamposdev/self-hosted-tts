@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { VOICE_NAME_MAX_CHARS } from "../../shared/constants/limits.constants.js";
-import { settingsSchema } from "../settings/settings.schema.js";
+import { VOICE_NAME_MAX_CHARS } from "#shared/constants/limits.constants.js";
+import { settingsSchema } from "#domain/settings/settings.schema.js";
 
 export const voicePatchSchema = z
   .object({

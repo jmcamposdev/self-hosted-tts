@@ -1,10 +1,10 @@
 import type { FastifyPluginAsync } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import type { ApiContext } from "../api.types.js";
-import { narrationSchema } from "../../domain/narration/narration.schema.js";
-import { idParamSchema } from "../../domain/common/params.schema.js";
+import { narrationSchema } from "#domain/narration/narration.schema.js";
+import { idParamSchema } from "#domain/common/params.schema.js";
 import { publicJob } from "../presenters/job.presenter.js";
-import { ensureFreeSpace } from "../../shared/tools/fs.tools.js";
+import { ensureFreeSpace } from "#shared/tools/fs.tools.js";
 
 export const ttsRoutes =
   (ctx: ApiContext): FastifyPluginAsync =>

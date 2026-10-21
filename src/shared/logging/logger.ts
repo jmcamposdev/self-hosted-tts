@@ -1,4 +1,4 @@
-import type { JobKind } from "../../domain/job/job.types.js";
+import type { JobKind } from "#domain/job/job.types.js";
 
 /** Structured, secret-free worker events (one JSON object per line on stdout). */
 export type WorkerEvent =

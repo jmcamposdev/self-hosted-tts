@@ -3,8 +3,8 @@ import {
   KILL_GRACE_MS,
   STDERR_TAIL_BYTES,
   STDOUT_TAIL_BYTES,
-} from "../../shared/constants/limits.constants.js";
-import { Fault } from "../../shared/errors/fault.js";
+} from "#shared/constants/limits.constants.js";
+import { Fault } from "#shared/errors/fault.js";
 
 /** Returns a Fault when stderr of a successful run reveals a hidden failure. */
 export type StderrInspector = (stderr: string) => Fault | undefined;

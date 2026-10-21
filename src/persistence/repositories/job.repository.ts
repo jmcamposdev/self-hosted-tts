@@ -1,11 +1,11 @@
 import { createHash, randomUUID } from "node:crypto";
-import type { Job, JobKind } from "../../domain/job/job.types.js";
-import type { Voice } from "../../domain/voice/voice.types.js";
+import type { Job, JobKind } from "#domain/job/job.types.js";
+import type { Voice } from "#domain/voice/voice.types.js";
 import {
   MAX_ATTEMPTS,
   TERMINAL_JOB_RETENTION_MS,
-} from "../../shared/constants/limits.constants.js";
-import { Fault } from "../../shared/errors/fault.js";
+} from "#shared/constants/limits.constants.js";
+import { Fault } from "#shared/errors/fault.js";
 import type { Database } from "../database.js";
 import type { LockRepository } from "./lock.repository.js";
 import type { VoiceRepository } from "./voice.repository.js";
