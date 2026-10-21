@@ -1,37 +1,39 @@
-# Guía de Extensión y Escalamiento
+# Extension & Scaling Guide
 
-Esta guía detalla los pasos para ampliar las capacidades del repositorio manteniendo la arquitectura Clean Code.
+This guide details the procedures for extending `self-hosted-tts` while maintaining Clean Code architecture.
 
-## 1. Añadir un Nuevo Ajuste de Voz
+## 1. Adding a New Voice Setting
 
-1. **Constantes y Esquema**:
-   - Editar [`src/domain/settings/settings.schema.ts`](file:///Users/josemaria/Developer/Github/self-hosted-tts/src/domain/settings/settings.schema.ts) agregando el campo a `settingsSchema`.
-   - Si tiene valor por defecto, definirlo en `DEFAULT_SETTINGS`.
-2. **Firma de Checkpoints**:
-   - Si el nuevo ajuste influye en la salida de audio del motor, asegurar su inclusión en `ResolvedSettings`. Automáticamente formará parte de `chunkFingerprint` en [`src/worker/pipelines/narration/checkpoint.ts`](file:///Users/josemaria/Developer/Github/self-hosted-tts/src/worker/pipelines/narration/checkpoint.ts).
-3. **Paso a Engine**:
-   - Mapear el valor en `SynthesizeInput` en [`src/infra/engine/engine.types.ts`](file:///Users/josemaria/Developer/Github/self-hosted-tts/src/infra/engine/engine.types.ts) y pasarlo como argumento CLI en `QwenEngine.synthesize`.
+1. **Schema & Types**:
+   - Edit [`src/domain/settings/settings.schema.ts`](file:///Users/josemaria/Developer/Github/self-hosted-tts/src/domain/settings/settings.schema.ts) and add the field to `settingsSchema`.
+   - If a default value exists, declare it in `DEFAULT_SETTINGS`.
+2. **Checkpoint Invalidation Safety**:
+   - If the new setting alters the generated audio, ensure it is preserved in `ResolvedSettings`. It will automatically be included in `chunkFingerprint` in [`src/worker/pipelines/narration/checkpoint.ts`](file:///Users/josemaria/Developer/Github/self-hosted-tts/src/worker/pipelines/narration/checkpoint.ts).
+3. **Engine Parameters**:
+   - Add the parameter to `SynthesizeInput` in [`src/infra/engine/engine.types.ts`](file:///Users/josemaria/Developer/Github/self-hosted-tts/src/infra/engine/engine.types.ts) and pass it to the C engine CLI in `QwenEngine.synthesize`.
 
-## 2. Añadir un Nuevo Endpoint HTTP
+## 2. Adding a New HTTP Endpoint
 
-1. **Definir el Servicio**:
-   - Añadir el método correspondiente en [`src/api/services/`](file:///Users/josemaria/Developer/Github/self-hosted-tts/src/api/services/).
-2. **Registrar la Ruta**:
-   - En el archivo de rutas apropiado (`src/api/routes/`), registrar el método HTTP y asociar el schema Zod para validación con `jsonSchema(...)`.
+1. **Service Layer**:
+   - Implement the use case in [`src/api/services/`](file:///Users/josemaria/Developer/Github/self-hosted-tts/src/api/services/).
+2. **Route Registration**:
+   - Register the endpoint in `src/api/routes/` and attach the Zod validation schema using `jsonSchema(...)`.
 3. **Presenter**:
-   - Si devuelve una entidad de dominio, asegurarse de exponer solo campos autorizados mediante los presenters en `src/api/presenters/`.
+   - When exposing domain objects, sanitize and map them via presenters in `src/api/presenters/`.
 
-## 3. Añadir un Nuevo Tipo de Trabajo (Job)
+## 3. Adding a New Job Type
 
-1. **Tipado**:
-   - Añadir la clave a `JobKind` en [`src/domain/job/job.types.ts`](file:///Users/josemaria/Developer/Github/self-hosted-tts/src/domain/job/job.types.ts).
-2. **Implementar Pipeline**:
-   - Crear una clase que implemente `JobPipeline` en `src/worker/pipelines/`.
-3. **Registrar en Worker**:
-   - Instanciar la pipeline en el constructor de `Worker` ([`src/worker/worker.ts`](file:///Users/josemaria/Developer/Github/self-hosted-tts/src/worker/worker.ts)) dentro del registro `this.pipelines`.
+1. **Domain Types**:
+   - Add the new identifier to `JobKind` in [`src/domain/job/job.types.ts`](file:///Users/josemaria/Developer/Github/self-hosted-tts/src/domain/job/job.types.ts).
+2. **Pipeline Implementation**:
+   - Create a class implementing `JobPipeline` in `src/worker/pipelines/`.
+3. **Worker Registration**:
+   - Instantiate the pipeline in the `Worker` constructor ([`src/worker/worker.ts`](file:///Users/josemaria/Developer/Github/self-hosted-tts/src/worker/worker.ts)) within `this.pipelines`.
 
-## 4. Añadir una Migración de Base de Datos
+## 4. Adding a Database Migration
 
-1. **Definir DDL**:
-   - En [`src/persistence/migrations.ts`](file:///Users/josemaria/Developer/Github/self-hosted-tts/src/persistence/migrations.ts), añadir una nueva entrada al array `MIGRATIONS`.
-   - El migrador aplica incrementalmente según `PRAGMA user_version` de forma atómica.
+1. **Declare DDL**:
+   - Open [`src/persistence/migrations.ts`](file:///Users/josemaria/Developer/Github/self-hosted-tts/src/persistence/migrations.ts) and append raw SQL as a new item in `MIGRATIONS`.
+   - Never modify or remove an existing migration index.
+2. **Automated Migration**:
+   - The runner automatically runs pending migrations sequentially based on `PRAGMA user_version`.

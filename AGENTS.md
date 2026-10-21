@@ -12,16 +12,16 @@ This is an independent private TTS service. Do not modify youtube-ai or the upst
 - Use only this Compose project's services when deploying or restarting. Do not stop, prune or reconfigure unrelated Docker projects.
 - Treat human listening, a real 30-minute run and independently annotated timing accuracy as explicit release gates. Automated contract checks do not satisfy those gates.
 
-## Convenciones de Código y Arquitectura
+## Architecture & Code Conventions
 
-- La base de código sigue principios Clean Code, separación de capas y responsabilidades únicas.
-- Sufijos de archivos:
-  - `*.types.ts`: Tipos puros, interfaces y uniones de dominio/infraestructura (sin lógica en runtime).
-  - `*.schema.ts`: Esquemas de validación Zod (`z.infer` exportado).
-  - `*.tools.ts`: Funciones puras y utilidades deterministas libres de estado o dependencias directas.
-  - `*.repository.ts`: Acceso y mutaciones a base de datos (SQLite exclusivo).
-  - `*.service.ts`: Casos de uso desacoplados de Fastify y transporte.
-  - `*.routes.ts`: Definición de endpoints HTTP.
-  - `*.pipeline.ts`: Orquestación multietapa de trabajos del Worker.
-  - `*.constants.ts`: Constantes de dominio, límites y audio.
-- Consulte `docs/architecture.md` y `docs/extending.md` para patrones de diseño y guías de extensión.
+- The codebase strictly follows Clean Code, separation of layers, and single responsibility principles.
+- Required file naming suffixes:
+  - `*.types.ts`: Pure TypeScript types, interfaces, and domain/infra unions (no runtime logic).
+  - `*.schema.ts`: Zod validation schemas (`z.infer` exported).
+  - `*.tools.ts`: Deterministic, side-effect-free pure utility functions.
+  - `*.repository.ts`: SQLite table queries and mutations (encapsulating raw SQL).
+  - `*.service.ts`: Application use cases decoupled from Fastify and transport details.
+  - `*.routes.ts`: HTTP route definitions.
+  - `*.pipeline.ts`: Worker multi-stage job orchestration pipelines.
+  - `*.constants.ts`: Canonical domain limits, identifiers, and audio parameters.
+- Refer to `docs/architecture.md` and `docs/extending.md` for architectural patterns and extension recipes.

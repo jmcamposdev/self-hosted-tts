@@ -1,43 +1,41 @@
-# Operación
+# Operations & Runbook
 
-## Estado y acceso
+## Status & Monitoring
 
-Ejecuta `docker compose ps`, consulta `GET /health/ready` y revisa `docker compose logs --tail=100 worker aligner api`. Las fases y el identificador de cada trabajo permiten diagnosticar errores sin registrar el guion ni la clave. Un error de alineación no convierte el trabajo en éxito parcial.
+Run `docker compose ps`, query `GET /health/ready`, and inspect container logs:
 
-La API solo escucha en loopback. Desde el Mac puedes abrir un túnel `ssh -N -L 18080:127.0.0.1:8080 SERVIDOR` y utilizar el cliente con `--url http://127.0.0.1:18080`. Copia la clave privada a un archivo protegido del cliente mediante un canal seguro; no la añadas a Git. Para acceso permanente, coloca un proxy HTTPS delante de 127.0.0.1:8080. No publiques el alineador ni montes el socket Docker dentro de la aplicación.
+```bash
+docker compose logs --tail=100 -f worker aligner api
+```
 
-## Datos y recursos
+The API listens only on the loopback interface (`127.0.0.1:8080`). For remote access from another workstation, establish an SSH tunnel (`ssh -N -L 18080:127.0.0.1:8080 SERVER`) or place an authenticated reverse proxy in front of it. Never expose the internal aligner service directly.
 
-- `storage/state.sqlite` y sus ficheros WAL/SHM: voces, trabajos, reservas y checkpoints.
-- `storage/voices/`: referencias y perfiles permanentes hasta borrado por API.
-- `storage/jobs/`: resultados e intermedios por intento, retenidos siete días.
-- `models/`: pesos descargados; se pueden volver a obtener con los scripts fijados.
-- `.secrets/api_key` y `.env`: autenticación y configuración local, ignoradas por Git.
+## Data & Resources
 
-SQLite requiere disco local de un solo host. No uses NFS, varios VPS ni copias de la base en paralelo. Un bloqueo global limita a un único trabajador de cálculo aunque arranquen varios procesos accidentalmente. Se reservan 12 GiB para el trabajador, 4 GiB para el alineador y 512 MiB para la API. Las fases de cálculo son secuenciales, aunque ambos servicios puedan usar cuatro CPU. Comprueba recursos de otros contenedores antes de aumentar límites.
+- `storage/state.sqlite` and WAL/SHM files: voices, jobs, leases, and checkpoints.
+- `storage/voices/`: reference audio and extracted `.qvoice` profiles.
+- `storage/jobs/`: attempt workspaces and delivered artifacts, retained for 7 days by default.
+- `models/`: downloaded model weights.
+- `.secrets/api_key` and `.env`: runtime credentials and configuration.
 
-La API rechaza nuevas solicitudes con 507 si quedan menos de 2 GiB libres. El trabajador comprueba el espacio antes de cada fragmento. La cola admite hasta 100 trabajos pendientes/activos. Todo ello se configura en `.env`; la actualización requiere recrear los servicios.
+SQLite requires a single host filesystem; never use NFS or distributed network mounts. Memory limits are budgeted as 12 GiB for the worker, 4 GiB for the aligner, and 512 MiB for the API.
 
-El limpiador comprueba caducidades cada minuto. Las descargas caducadas se rechazan inmediatamente, aunque la limpieza física aún no se haya ejecutado. Los metadatos de trabajos caducados permanecen para consultar su estado; no contienen el audio y se eliminan el guion y la configuración capturada al completar la limpieza. Las voces y sus referencias no caducan. Borrar una voz requiere acabar o cancelar antes sus trabajos.
+The API rejects new jobs with `507` if less than 2 GiB free storage remains. The worker verifies free space before each segment. The queue accepts up to 100 pending/active jobs.
 
-## Reinicios y recuperación
+The janitor runs every minute: expired artifacts are marked immediately, physical files are pruned, and scripts/settings in SQLite are scrubbed. Voices and references never expire automatically.
 
-`docker compose restart worker` detiene el proceso de síntesis y devuelve el trabajo a la cola conservando sus checkpoints. Si el proceso muere abruptamente, el trabajo se puede recuperar al vencer su reserva de 120 segundos. No hay más de tres intentos automáticos. Un trabajador antiguo no puede publicar un resultado después de perder su reserva.
+## Restarts & Recovery
 
-Cada fragmento confirmado tiene una huella de configuración y un checksum del PCM. Se reutilizan únicamente fragmentos completos y válidos. Un fallo transitorio del alineador admite dos reintentos; texto inválido, referencia incompatible, baja confianza o falta de espacio no se reintentan automáticamente. Para estos últimos, corrige la causa y crea otra solicitud con otra clave de idempotencia.
+Restarting the worker (`docker compose restart worker`) stops synthesis and returns jobs to the queue while preserving completed chunk checkpoints. If a worker process dies abruptly, the job can be reclaimed once its 120-second lease expires. Up to 3 automatic attempts are allowed. Stale workers cannot publish results after losing their lease.
 
-Cancelar es asíncrono y tarda como máximo el intervalo habitual de heartbeat (10 segundos) más la terminación del proceso. Borrar un trabajo activo solicita cancelación y posterior eliminación física. Los perfiles finales viven fuera del árbol del trabajo de clonación y sobreviven a su caducidad.
+Cancellation is asynchronous and takes at most the heartbeat interval (10 seconds) plus process termination time.
 
-## Copia y restauración
+## Backup & Restoration
 
-Para una copia consistente, detén API y trabajador con `docker compose stop api worker`. Copia `storage`, `.secrets` y `.env` juntos, incluidos los archivos WAL que existan. Reinicia con `docker compose up -d`. El alineador solo lee datos y no necesita participar en la copia. Protege la copia: contiene voces, referencias, guiones y credenciales.
+To take a consistent backup:
 
-Para restaurar, conserva propietario/permisos, restaura esos tres elementos en el directorio del proyecto, vuelve a descargar modelos si faltan y levanta Compose. Si el host tiene otro UID/GID, actualiza TTS_UID/TTS_GID y la propiedad de los volúmenes antes de arrancar. No copies una base SQLite abierta de manera independiente de sus archivos WAL.
+1. Stop API and worker: `docker compose stop api worker`.
+2. Backup `storage/`, `.secrets/`, and `.env` together.
+3. Restart services: `docker compose up -d`.
 
-## Actualizar
-
-No cambies de revisión de motor/modelos en un trabajo activo. Espera a que termine o cancélalo. Guarda la copia anterior, obtén la revisión nueva del repositorio y ejecuta `docker compose build && docker compose up -d`. Comprueba salud y un piloto corto antes de usar narraciones largas. Los esquemas de la primera versión se crean al arrancar; futuros cambios persistentes requerirán migraciones explícitas.
-
-Las imágenes base siguen sus etiquetas de mantenimiento y los paquetes del sistema reciben actualizaciones al reconstruir; el código del motor, los pesos y las dependencias de aplicación están fijados por commit, revisiones y lockfiles. Registra la revisión del proyecto y los IDs de imagen utilizados en cada despliegue.
-
-Para rotar la clave, reemplaza el contenido del archivo privado y recrea API y trabajador. Actualiza la copia de los clientes. No imprimas la clave en registros ni la incluyas en comandos compartidos.
+To restore, maintain file ownership/permissions, restore those three items, verify model weights, and launch Docker Compose.

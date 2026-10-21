@@ -1,8 +1,8 @@
-# Arquitectura y Diseño del Sistema
+# System Architecture & Design
 
-`self-hosted-tts` es un servicio privado asíncrono en español que orquesta síntesis mediante perfiles clonados (motor C `qwen3-tts`) y alineación temporal forzada por carácter compatible con el formato de ElevenLabs.
+`self-hosted-tts` is an independent, private asynchronous narration service that coordinates voice cloning profiles via a native C engine (`qwen3-tts`) and character-level forced temporal alignment matching the ElevenLabs JSON format.
 
-## Diagrama de Componentes y Capas
+## Layer & Component Architecture
 
 ```mermaid
 flowchart TD
@@ -11,7 +11,7 @@ flowchart TD
     WORKER_EP[src/worker.ts]
   end
 
-  subgraph API_Layer [API / HTTP]
+  subgraph API_Layer [API / HTTP Layer]
     Server[api/server.ts]
     Routes[api/routes/*]
     Services[api/services/*]
@@ -35,7 +35,7 @@ flowchart TD
     ArtifactsDomain[domain/artifacts/*]
   end
 
-  subgraph Persistence_Layer [Persistence]
+  subgraph Persistence_Layer [Persistence Layer]
     Store[persistence/store.ts]
     Database[persistence/database.ts]
     Migrations[persistence/migrations.ts]
@@ -50,7 +50,7 @@ flowchart TD
     ProcessRunner[infra/process/*]
   end
 
-  subgraph Shared_Layer [Cross-cutting]
+  subgraph Shared_Layer [Shared Utilities & Constants]
     Constants[shared/constants/*]
     Errors[shared/errors/*]
     Tools[shared/tools/*]
@@ -77,20 +77,20 @@ flowchart TD
   Repos --> Database --> Migrations
 ```
 
-## Convenciones de Nomenclatura
+## File Suffix Conventions
 
-- `*.types.ts`: Definición estricta de interfaces y uniones (sin runtime).
-- `*.schema.ts`: Esquemas Zod para validación de fronteras (requests, env).
-- `*.tools.ts`: Funciones puras y utilidades reutilizables libres de dependencias de negocio.
-- `*.repository.ts`: Clases de acceso y mutación a SQLite (encapsulan SQL y transacciones).
-- `*.service.ts`: Casos de uso de la aplicación (desacoplados de Fastify).
-- `*.routes.ts`: Endpoints HTTP que conectan schemas, services y presenters.
-- `*.pipeline.ts`: Flujo de orquestación multietapa para ejecución de trabajos.
-- `*.constants.ts`: Constantes canónicas (audio, límites de cuota, identificadores de motor).
+- `*.types.ts`: Pure TypeScript types and interfaces (no runtime code).
+- `*.schema.ts`: Zod validation schemas (`z.infer` exported).
+- `*.tools.ts`: Pure, deterministic utility functions free of external side effects.
+- `*.repository.ts`: SQLite table queries and mutations (encapsulating SQL).
+- `*.service.ts`: Fastify-agnostic application use cases.
+- `*.routes.ts`: Fastify HTTP endpoint definitions.
+- `*.pipeline.ts`: Worker multi-stage job pipelines.
+- `*.constants.ts`: Canonical domain limits, identifiers, and audio parameters.
 
-## Invariantes Críticos del Sistema
+## Core Invariants
 
-1. **Job Fencing**: Todo trabajo ejecutado por el worker posee un `token` único generado en `claim`. Las operaciones atómicas (`checkpoint`, `finish`, `heartbeat`) verifican dicho token para evitar que un proceso rezagado sobreescriba resultados.
-2. **Checkpoints durables**: La síntesis de narraciones divide el guión en fragmentos. Cada fragmento confirmado almacena un `chunk.json` con firma SHA-256 de los parámetros de entrada y checksum del PCM generado, permitiendo recuperación sin duplicación de cálculo.
-3. **Snapshots inmutables**: La configuración de la voz y los parámetros solicitados se capturan en el momento del `enqueue` en JSON inmutable. Cambios posteriores en la voz no alteran ejecuciones pendientes o históricas.
-4. **Preservación textual de alineación**: La alineación acústica final reconstruye el texto original exactamente con espacios y puntuación, manteniendo monotónica la línea de tiempo e identificando posiciones numéricas expandidas en metadatos.
+1. **Job Fencing**: Every job claimed by a worker holds an atomic `token` generated during `claim`. State-changing mutations (`checkpoint`, `finish`, `heartbeat`) check this token so stale workers can never overwrite results after a lease loss.
+2. **Durable Checkpoints**: Narrations are split into sentences/paragraphs. Each segment generates a checkpoint with input SHA-256 fingerprinting and PCM audio checksums, allowing instant recovery without duplicate calculation.
+3. **Immutable Snapshots**: The voice state and request settings are frozen into JSON at enqueue time. Subsequent changes to the voice do not mutate pending or historical jobs.
+4. **Text-Preserving Monotonic Alignment**: The public character alignment matches the exact original text (including spaces, symbols, and line breaks). Character timestamps remain strictly monotonic, with expanded number/date positions projected into the metadata.
