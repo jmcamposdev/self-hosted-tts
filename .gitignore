@@ -5,7 +5,7 @@ __pycache__/
 *.pyc
 .env
 .secrets/
-storage/
+/storage/
 models/
 .cache/
 coverage/
