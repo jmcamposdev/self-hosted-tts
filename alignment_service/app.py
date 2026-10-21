@@ -3,8 +3,8 @@ import threading
 from contextlib import asynccontextmanager
 from pathlib import Path
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
 from .normalize import normalize
+from .schemas import TextRequest, AlignRequest, NormalizeResponse, AlignResponse
 
 aligner = None
 lock = threading.Lock()
@@ -12,7 +12,7 @@ root = Path(os.environ.get('DATA_DIR', 'storage')).resolve()
 
 
 @asynccontextmanager
-async def lifespan(app):
+async def lifespan(app: FastAPI):
     global aligner
     from .core import Aligner
     aligner = Aligner()
@@ -22,15 +22,6 @@ async def lifespan(app):
 app = FastAPI(title='Internal Spanish alignment', lifespan=lifespan, docs_url=None, redoc_url=None)
 
 
-class TextRequest(BaseModel):
-    text: str = Field(min_length=1, max_length=30000)
-
-
-class AlignRequest(BaseModel):
-    path: str
-    text: str = Field(min_length=1, max_length=1500)
-
-
 @app.get('/health')
 def health():
     if aligner is None:
@@ -38,7 +29,7 @@ def health():
     return dict(status='ready')
 
 
-@app.post('/normalize')
+@app.post('/normalize', response_model=NormalizeResponse)
 def normalize_request(request: TextRequest):
     try:
         return normalize(request.text)
@@ -46,10 +37,10 @@ def normalize_request(request: TextRequest):
         raise HTTPException(422, 'Cannot normalize number/date; write it as spoken Spanish')
 
 
-@app.post('/align')
+@app.post('/align', response_model=AlignResponse)
 def align_request(request: AlignRequest):
     path = Path(request.path).resolve()
-    if not path.is_relative_to(root/'jobs') or not path.is_file() or path.suffix != '.wav':
+    if not path.is_relative_to(root / 'jobs') or not path.is_file() or path.suffix != '.wav':
         raise HTTPException(422, 'Audio must be a managed local job WAV')
     if aligner is None:
         raise HTTPException(503, 'Alignment model not ready')
