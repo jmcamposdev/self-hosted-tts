@@ -7,8 +7,11 @@ export const voiceDir = (data: string, voiceId: string) =>
 export const voiceReferencePath = (data: string, voiceId: string) =>
   join(voiceDir(data, voiceId), "reference.upload");
 
-export const voiceProfilePath = (data: string, voiceId: string, token: string) =>
-  join(voiceDir(data, voiceId), `profile-${token}.qvoice`);
+export const voiceProfilePath = (
+  data: string,
+  voiceId: string,
+  token: string,
+) => join(voiceDir(data, voiceId), `profile-${token}.qvoice`);
 
 export const jobRoot = (data: string, jobId: string) =>
   join(data, "jobs", jobId);
