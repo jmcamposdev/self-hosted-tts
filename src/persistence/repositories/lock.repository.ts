@@ -29,6 +29,6 @@ export class LockRepository {
     const row = this.db.sqlite
       .prepare("SELECT until_ms FROM locks WHERE name='worker'")
       .get() as { until_ms: number } | undefined;
-    return Number(row?.until_ms);
+    return Number(row?.until_ms || 0);
   }
 }

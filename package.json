@@ -13,6 +13,7 @@
     "dev": "tsx src/api.ts",
     "dev:worker": "tsx src/worker.ts",
     "test": "tsx --test test/*.test.ts",
+    "test:coverage": "tsx --test --experimental-test-coverage test/*.test.ts",
     "test:python": ".venv/bin/python -m unittest discover -s test -p \"test_*.py\"",
     "format:check": "prettier --check src test/*.ts compose.yaml package.json tsconfig.json",
     "typecheck": "tsc -p tsconfig.test.json",
