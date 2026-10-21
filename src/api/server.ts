@@ -1,6 +1,10 @@
 import Fastify from "fastify";
 import multipart from "@fastify/multipart";
 import rateLimit from "@fastify/rate-limit";
+import {
+  serializerCompiler,
+  validatorCompiler,
+} from "fastify-type-provider-zod";
 import type { Configuration } from "../config/config.types.js";
 import { Store } from "../persistence/store.js";
 import { AlignerClient } from "../infra/aligner/aligner-client.js";
@@ -45,6 +49,9 @@ export async function createApi(config: Configuration) {
       redact: ["req.headers.authorization", "req.headers.xi-api-key"],
     },
   });
+
+  app.setValidatorCompiler(validatorCompiler);
+  app.setSerializerCompiler(serializerCompiler);
 
   app.addHook("onClose", async () => {
     store.close();

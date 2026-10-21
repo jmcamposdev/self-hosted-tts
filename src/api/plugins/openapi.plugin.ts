@@ -2,9 +2,11 @@ import type { FastifyPluginAsync } from "fastify";
 import fp from "fastify-plugin";
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
+import { jsonSchemaTransform } from "fastify-type-provider-zod";
 
 const openapiPluginCallback: FastifyPluginAsync = async (app) => {
   await app.register(swagger, {
+    transform: jsonSchemaTransform,
     transformObject: (document) => {
       const swaggerObject =
         "openapiObject" in document

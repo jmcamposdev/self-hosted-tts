@@ -1,10 +1,20 @@
 import type { FastifyPluginAsync } from "fastify";
 import fp from "fastify-plugin";
 import { z } from "zod";
+import { hasZodFastifySchemaValidationErrors } from "fastify-type-provider-zod";
 import { Fault } from "../../shared/errors/fault.js";
 
 const errorHandlerCallback: FastifyPluginAsync = async (app) => {
   app.setErrorHandler((e, req, reply) => {
+    if (hasZodFastifySchemaValidationErrors(e)) {
+      return reply.code(400).send({
+        error: {
+          code: "INVALID_REQUEST",
+          message: "Invalid request",
+          issues: e.validation,
+        },
+      });
+    }
     if (e instanceof z.ZodError) {
       return reply.code(400).send({
         error: {

@@ -1,15 +1,18 @@
 import type { FastifyPluginAsync } from "fastify";
+import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import type { ApiContext } from "../api.types.js";
 import { publicVoice } from "../presenters/voice.presenter.js";
 import { voicePatchSchema } from "../../domain/voice/voice.schema.js";
 import { settingsSchema } from "../../domain/settings/settings.schema.js";
+import { idParamSchema } from "../../domain/common/params.schema.js";
 import { Fault } from "../../shared/errors/fault.js";
 import { ensureFreeSpace } from "../../shared/tools/fs.tools.js";
-import { jsonSchema } from "./tools.js";
 
 export const voiceRoutes =
   (ctx: ApiContext): FastifyPluginAsync =>
-  async (app) => {
+  async (fastify) => {
+    const app = fastify.withTypeProvider<ZodTypeProvider>();
+
     app.get("/v1/voices", async () => ({
       voices: ctx.voices.list().map(publicVoice),
     }));
@@ -78,22 +81,37 @@ export const voiceRoutes =
       },
     );
 
-    app.get<{ Params: { id: string } }>("/v1/voices/:id", async (req) =>
-      publicVoice(ctx.voices.find(req.params.id)),
+    app.get(
+      "/v1/voices/:id",
+      {
+        schema: {
+          params: idParamSchema,
+        },
+      },
+      async (req) => publicVoice(ctx.voices.find(req.params.id)),
     );
 
-    app.patch<{ Params: { id: string } }>(
+    app.patch(
       "/v1/voices/:id",
-      { schema: { body: jsonSchema(voicePatchSchema) } },
+      {
+        schema: {
+          params: idParamSchema,
+          body: voicePatchSchema,
+        },
+      },
       async (req) => {
-        const input = voicePatchSchema.parse(req.body);
-        const updated = ctx.voices.patch(req.params.id, input);
+        const updated = ctx.voices.patch(req.params.id, req.body);
         return publicVoice(updated);
       },
     );
 
-    app.delete<{ Params: { id: string } }>(
+    app.delete(
       "/v1/voices/:id",
+      {
+        schema: {
+          params: idParamSchema,
+        },
+      },
       async (req, reply) => {
         await ctx.voices.remove(req.params.id);
         return reply.code(204).send();
