@@ -156,6 +156,9 @@ test("API authentication, immutable job snapshot, validation and expired artifac
         .statusCode,
       409,
     );
+    assert.ok(response.headers["x-request-id"]);
+    assert.equal(x.store.job(id)!.request_id, response.headers["x-request-id"]);
+    assert.equal(response.json().request_id, response.headers["x-request-id"]);
     const dir = join(x.data, "jobs", id, "result");
     await mkdir(dir, { recursive: true });
     await writeFile(join(dir, "alignment.json"), "{}");
@@ -285,4 +288,40 @@ test("subprocess timeout terminates computation and reports retryable failure", 
     ),
     (e) => e instanceof Fault && e.code === "STAGE_TIMEOUT" && e.transient,
   );
+});
+test("correlation ID propagation from HTTP request to database and job endpoints", async () => {
+  const x = await setup(),
+    v = voice(x.store),
+    app = await createApi(x.config);
+  try {
+    const customReqId = "trace-corr-id-9988";
+    const res = await app.inject({
+      method: "POST",
+      url: `/v1/text-to-speech/${v.id}`,
+      headers: {
+        authorization: "Bearer " + x.config.key,
+        "x-request-id": customReqId,
+      },
+      payload: { text: "Testing correlation ID." },
+    });
+    assert.equal(res.statusCode, 202);
+    assert.equal(res.headers["x-request-id"], customReqId);
+    const body = res.json();
+    assert.equal(body.request_id, customReqId);
+
+    const job = x.store.job(body.job_id);
+    assert.ok(job);
+    assert.equal(job.request_id, customReqId);
+
+    // GET /v1/jobs/:id exposes request_id
+    const getJob = await app.inject({
+      method: "GET",
+      url: `/v1/jobs/${body.job_id}`,
+      headers: { authorization: "Bearer " + x.config.key },
+    });
+    assert.equal(getJob.statusCode, 200);
+    assert.equal(getJob.json().request_id, customReqId);
+  } finally {
+    await x.cleanup();
+  }
 });

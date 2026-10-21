@@ -101,12 +101,17 @@ export class Worker {
       job_id: job.id,
       kind: job.kind,
       attempt: job.attempts,
+      request_id: job.request_id,
     });
     try {
       const dir = jobAttemptDir(config.data, job.id, job.token!);
       await mkdir(dir, { recursive: true });
       await this.pipelines[job.kind].run({ job, dir, signal: lease.signal });
-      logEvent({ event: "job_completed", job_id: job.id });
+      logEvent({
+        event: "job_completed",
+        job_id: job.id,
+        request_id: job.request_id,
+      });
     } catch (e) {
       const error = this.stopped
         ? new Fault(
@@ -124,6 +129,7 @@ export class Worker {
         event: "job_failed",
         job_id: job.id,
         code: error instanceof Fault ? error.code : "INTERNAL_ERROR",
+        request_id: job.request_id,
       });
     } finally {
       lease.stop();

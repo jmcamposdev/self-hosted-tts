@@ -41,6 +41,7 @@ export class JobService {
     voiceId: string,
     request: NarrationRequest,
     idempotencyKey: string | string[] | undefined,
+    requestId?: string,
   ): Job {
     const voice = this.voices.find(voiceId);
     if (voice.status !== "ready")
@@ -60,6 +61,7 @@ export class JobService {
       request,
       this.config.maxQueue,
       idempotencyKey || undefined,
+      requestId,
     );
   }
 

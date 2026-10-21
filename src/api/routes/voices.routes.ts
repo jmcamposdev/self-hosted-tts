@@ -72,6 +72,7 @@ export const voiceRoutes =
           name,
           audio,
           settings,
+          requestId: req.id,
         });
         return reply.code(202).send({
           ...publicVoice(voice),

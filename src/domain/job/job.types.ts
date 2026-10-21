@@ -46,6 +46,7 @@ export interface Job {
   expires_at: number | null;
   idem_key: string | null;
   request_hash: string;
+  request_id: string | null;
 }
 
 /** Durable per-fragment checkpoint used to resume narration after a failure. */

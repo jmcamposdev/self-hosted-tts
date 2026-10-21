@@ -27,7 +27,12 @@ export const ttsRoutes =
           "Insufficient free storage",
         );
         const idem = req.headers["idempotency-key"];
-        const job = ctx.jobs.enqueueNarration(req.params.id, req.body, idem);
+        const job = ctx.jobs.enqueueNarration(
+          req.params.id,
+          req.body,
+          idem,
+          req.id,
+        );
 
         return reply
           .code(202)

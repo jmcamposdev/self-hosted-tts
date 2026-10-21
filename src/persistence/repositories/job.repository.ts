@@ -33,6 +33,7 @@ export class JobRepository {
     request: unknown,
     maxQueue: number,
     idem?: string,
+    requestId?: string,
   ): Job {
     const serialized = JSON.stringify(request),
       hash = createHash("sha256")
@@ -62,7 +63,7 @@ export class JobRepository {
         now = Date.now();
       this.db.sqlite
         .prepare(
-          "INSERT INTO jobs(id,kind,status,voice_id,request_json,snapshot_json,created_at,updated_at,idem_key,request_hash) VALUES(?,?,'queued',?,?,?,?,?,?,?)",
+          "INSERT INTO jobs(id,kind,status,voice_id,request_json,snapshot_json,created_at,updated_at,idem_key,request_hash,request_id) VALUES(?,?,'queued',?,?,?,?,?,?,?,?)",
         )
         .run(
           id,
@@ -74,6 +75,7 @@ export class JobRepository {
           now,
           idem || null,
           hash,
+          requestId || null,
         );
       return this.find(id)!;
     });

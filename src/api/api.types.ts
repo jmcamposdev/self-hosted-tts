@@ -36,4 +36,5 @@ export interface PublicJob {
   updated_at: number;
   expires_at: number | null;
   error: { code: string; message: string | null } | null;
+  request_id: string | null;
 }

@@ -53,8 +53,9 @@ export class Store {
     request: unknown,
     maxQueue: number,
     idem?: string,
+    requestId?: string,
   ): Job {
-    return this.jobs.enqueue(kind, voice, request, maxQueue, idem);
+    return this.jobs.enqueue(kind, voice, request, maxQueue, idem, requestId);
   }
 
   acquire(owner: string, ttl: number): boolean {

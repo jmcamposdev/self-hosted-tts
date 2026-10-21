@@ -13,4 +13,5 @@ export const publicJob = (j: Job): PublicJob => ({
   updated_at: j.updated_at,
   expires_at: j.expires_at,
   error: j.error_code ? { code: j.error_code, message: j.error_message } : null,
+  request_id: j.request_id ?? null,
 });

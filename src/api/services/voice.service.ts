@@ -14,6 +14,7 @@ export interface CreateVoiceInput {
   name: string;
   audio: Buffer;
   settings: Settings;
+  requestId?: string;
 }
 
 /** Voice use cases: catalog, cloning request, configuration and deletion. */
@@ -59,6 +60,8 @@ export class VoiceService {
           this.store.voices.find(id)!,
           {},
           this.config.maxQueue,
+          undefined,
+          input.requestId,
         );
       });
       return { voice: this.store.voices.find(id)!, job };

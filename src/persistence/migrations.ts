@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS jobs(id TEXT PRIMARY KEY,kind TEXT NOT NULL,status TE
 CREATE INDEX IF NOT EXISTS job_queue ON jobs(status,created_at);
 CREATE TABLE IF NOT EXISTS chunks(job_id TEXT NOT NULL,chunk_index INTEGER NOT NULL,fingerprint TEXT NOT NULL,path TEXT NOT NULL,PRIMARY KEY(job_id,chunk_index));
 CREATE TABLE IF NOT EXISTS locks(name TEXT PRIMARY KEY,owner TEXT NOT NULL,until_ms INTEGER NOT NULL);`,
+  // v2: correlation ID support.
+  `ALTER TABLE jobs ADD COLUMN request_id TEXT;`,
 ];
 
 export function migrate(sqlite: DatabaseSync): void {

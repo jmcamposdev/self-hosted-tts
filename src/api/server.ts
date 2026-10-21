@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import Fastify from "fastify";
 import multipart from "@fastify/multipart";
 import rateLimit from "@fastify/rate-limit";
@@ -43,6 +44,18 @@ export async function createApi(config: Configuration) {
 
   const app = Fastify({
     bodyLimit: API_BODY_LIMIT_BYTES,
+    requestIdHeader: "x-request-id",
+    genReqId: (req) => {
+      const header = req.headers["x-request-id"];
+      if (
+        typeof header === "string" &&
+        header.length <= 128 &&
+        /^[a-zA-Z0-9_\-.]+$/.test(header)
+      ) {
+        return header;
+      }
+      return randomUUID();
+    },
     ajv: { customOptions: { removeAdditional: false } },
     logger: {
       level: "info",
@@ -52,6 +65,10 @@ export async function createApi(config: Configuration) {
 
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
+
+  app.addHook("onSend", async (req, reply) => {
+    reply.header("x-request-id", req.id);
+  });
 
   app.addHook("onClose", async () => {
     store.close();
