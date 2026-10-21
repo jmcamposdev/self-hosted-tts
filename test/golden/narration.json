@@ -1,0 +1,177 @@
+{
+  "alignment": {
+    "characters": [
+      "A",
+      "ñ",
+      "o",
+      " ",
+      "1",
+      "9",
+      "4",
+      "5",
+      " ",
+      "f",
+      "i",
+      "n",
+      ".",
+      "\n",
+      "\n",
+      "O",
+      "t",
+      "r",
+      "a",
+      " ",
+      "v",
+      "e",
+      "z",
+      "."
+    ],
+    "character_start_times_seconds": [
+      0,
+      0.046511627906976744,
+      0.09302325581395349,
+      0.13953488372093023,
+      0.18604651162790697,
+      0.5581395348837209,
+      0.9302325581395349,
+      1.302325581395349,
+      1.6744186046511629,
+      1.7209302325581395,
+      1.7674418604651163,
+      1.813953488372093,
+      1.8604651162790697,
+      1.9069767441860466,
+      1.9534883720930232,
+      2.25,
+      2.4722222222222223,
+      2.6944444444444446,
+      2.9166666666666665,
+      3.138888888888889,
+      3.361111111111111,
+      3.583333333333333,
+      3.8055555555555554,
+      4.027777777777778
+    ],
+    "character_end_times_seconds": [
+      0.046511627906976744,
+      0.09302325581395349,
+      0.13953488372093023,
+      0.18604651162790697,
+      0.5581395348837209,
+      0.9302325581395349,
+      1.302325581395349,
+      1.6744186046511627,
+      1.7209302325581395,
+      1.7674418604651163,
+      1.813953488372093,
+      1.8604651162790697,
+      1.9069767441860466,
+      1.9534883720930232,
+      2,
+      2.4722222222222223,
+      2.6944444444444446,
+      2.9166666666666665,
+      3.138888888888889,
+      3.361111111111111,
+      3.583333333333333,
+      3.8055555555555554,
+      4.027777777777778,
+      4.25
+    ]
+  },
+  "words": [
+    {
+      "word": "Año",
+      "start": 0,
+      "end": 0.13953488372093023
+    },
+    {
+      "word": "1945",
+      "start": 0.18604651162790697,
+      "end": 1.6744186046511627
+    },
+    {
+      "word": "fin.",
+      "start": 1.7209302325581395,
+      "end": 1.9069767441860466
+    },
+    {
+      "word": "Otra",
+      "start": 2.25,
+      "end": 3.138888888888889
+    },
+    {
+      "word": "vez.",
+      "start": 3.361111111111111,
+      "end": 4.25
+    }
+  ],
+  "subtitles": "1\n00:00:00,000 --> 00:00:01,907\nAño 1945 fin.\n\n2\n00:00:02,250 --> 00:00:04,250\nOtra vez.\n",
+  "metadata": {
+    "schema_version": 1,
+    "voice_id": "v",
+    "voice_name": "Test",
+    "voice_profile_sha256": "8e4fcb0e8a20b2729255b461140dbc4952cd9e01a75cc8fa031f3a32643b8405",
+    "settings": {
+      "speed": 1.08,
+      "volume": 1,
+      "paragraph_pause_ms": 250,
+      "seed": 42
+    },
+    "model": "Qwen3-TTS-12Hz-1.7B-CustomVoice",
+    "engine_commit": "ef339be58a778b062e1c14382347964552eae007",
+    "engine_sha256": "synthetic-test-engine",
+    "duration_seconds": 4.25,
+    "sample_rate": 24000,
+    "alignment": {
+      "method": "wav2vec2-es-ctc",
+      "derived_character_positions": [
+        1,
+        4,
+        5,
+        6,
+        7,
+        16
+      ],
+      "original_text_preserved": true
+    },
+    "segments": [
+      {
+        "index": 0,
+        "source": "ctc",
+        "duration_seconds": 2,
+        "offset_seconds": 0,
+        "confidence": 0.5,
+        "frame_seconds": 0.02,
+        "model_revision": "test"
+      },
+      {
+        "index": 1,
+        "source": "ctc",
+        "duration_seconds": 2,
+        "offset_seconds": 2.25,
+        "confidence": 0.5,
+        "frame_seconds": 0.02,
+        "model_revision": "test"
+      }
+    ]
+  },
+  "chunk_fingerprints": [
+    "0ee4f9ffd4e88ea85913a4014f2b5ed3ac574a521fc17e1434620ac65b036b71",
+    "6ae478e6cc86b08400aa8d1f63f109965b1e9b3b987e81181040588077d3d49c"
+  ],
+  "aligned_texts": [
+    "Año mil novecientos cuarenta y cinco fin.\n\n",
+    "Otra vez."
+  ],
+  "files": [
+    "audio.opus",
+    "audio.wav",
+    "alignment.json",
+    "words.json",
+    "subtitles.srt",
+    "metadata.json"
+  ],
+  "chunk_fingerprint_is_sha256": true,
+  "wav_sha256": "f3cab870bf0c47f9b4978c453e904fb079ac7c411815332faf9ed02bcaf622eb"
+}
