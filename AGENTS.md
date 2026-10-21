@@ -11,3 +11,17 @@ This is an independent private TTS service. Do not modify youtube-ai or the upst
 - The application targets Linux ARM64/DOTPROD first. A successful macOS test does not establish ARM Linux behavior or VPS throughput.
 - Use only this Compose project's services when deploying or restarting. Do not stop, prune or reconfigure unrelated Docker projects.
 - Treat human listening, a real 30-minute run and independently annotated timing accuracy as explicit release gates. Automated contract checks do not satisfy those gates.
+
+## Convenciones de Código y Arquitectura
+
+- La base de código sigue principios Clean Code, separación de capas y responsabilidades únicas.
+- Sufijos de archivos:
+  - `*.types.ts`: Tipos puros, interfaces y uniones de dominio/infraestructura (sin lógica en runtime).
+  - `*.schema.ts`: Esquemas de validación Zod (`z.infer` exportado).
+  - `*.tools.ts`: Funciones puras y utilidades deterministas libres de estado o dependencias directas.
+  - `*.repository.ts`: Acceso y mutaciones a base de datos (SQLite exclusivo).
+  - `*.service.ts`: Casos de uso desacoplados de Fastify y transporte.
+  - `*.routes.ts`: Definición de endpoints HTTP.
+  - `*.pipeline.ts`: Orquestación multietapa de trabajos del Worker.
+  - `*.constants.ts`: Constantes de dominio, límites y audio.
+- Consulte `docs/architecture.md` y `docs/extending.md` para patrones de diseño y guías de extensión.
